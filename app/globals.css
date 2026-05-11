@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+html, body { height: 100%; }
+body { background: #0F0E0C; overscroll-behavior: none; }
+
+.num { font-variant-numeric: tabular-nums; font-family: 'DM Mono', monospace; }
+.font-display { font-family: 'Fraunces', Georgia, serif; font-weight: 400; letter-spacing: -0.015em; }
+.fade-in { animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.grain::after { content: ''; position: fixed; inset: 0; pointer-events: none; opacity: 0.3; z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); }
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.scrollbar-thin::-webkit-scrollbar { height: 3px; width: 3px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }

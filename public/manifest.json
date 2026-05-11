@@ -1,0 +1,14 @@
+{
+  "name": "Patrimony",
+  "short_name": "Patrimony",
+  "description": "Personal wealth ledger",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F0E0C",
+  "theme_color": "#0F0E0C",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/apple-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
