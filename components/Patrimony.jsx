@@ -1,6 +1,5 @@
 'use client';
 import { storage } from '../lib/db';
-import ErrorBoundary from './ErrorBoundary';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Wallet, Gem, Building2, TrendingUp, LineChart as LineIcon,
@@ -301,8 +300,30 @@ const toMonthlyNet = (item) => {
 };
 
 // ===== SEED =====
-const SEED_HOLDINGS = [];
-const SEED_BANK = [];
+const SEED_HOLDINGS = [
+  // IBKR positions
+  { id: 'seed-meta', assetType: 'stock', ticker: 'META', name: 'Meta Platforms',    shares: 4.9377, avgCost: 37359.10, currentPrice: 37407.38, broker: 'Interactive Brokers', notes: 'U16384716 · Long-term', tag: 'core', lastUpdated: new Date().toISOString() },
+  { id: 'seed-msft', assetType: 'stock', ticker: 'MSFT', name: 'Microsoft',          shares: 5.2102, avgCost: 23599.85, currentPrice: 25467.34, broker: 'Interactive Brokers', notes: 'U16384716 · Long-term', tag: 'core', lastUpdated: new Date().toISOString() },
+  { id: 'seed-nvda', assetType: 'stock', ticker: 'NVDA', name: 'NVIDIA',             shares: 5.7297, avgCost: 10735.51, currentPrice: 12194.75, broker: 'Interactive Brokers', notes: 'U16384716 · Long-term', tag: 'core', lastUpdated: new Date().toISOString() },
+  { id: 'seed-spot', assetType: 'stock', ticker: 'SPOT', name: 'Spotify Technology', shares: 3.4249, avgCost: 26930.67, currentPrice: 27130.79, broker: 'Interactive Brokers', notes: 'U16384716 · Long-term', tag: 'core', lastUpdated: new Date().toISOString() },
+  { id: 'seed-spy',  assetType: 'stock', ticker: 'SPY',  name: 'SPDR S&P 500 ETF',  shares: 9.1173, avgCost: 40446.22, currentPrice: 44283.94, broker: 'Interactive Brokers', notes: 'U16384716 · Long-term anchor', tag: 'core', lastUpdated: new Date().toISOString() },
+  // Binance crypto — prices approximate, tap Refresh for live rates
+  { id: 'seed-btc', assetType: 'crypto', ticker: 'BTC', name: 'Bitcoin',  shares: 0.02611531, avgCost: 0, currentPrice: 5500000, broker: 'Binance', notes: 'Refresh for live price', lastUpdated: new Date().toISOString() },
+  { id: 'seed-eth', assetType: 'crypto', ticker: 'ETH', name: 'Ethereum', shares: 0.67932456, avgCost: 0, currentPrice: 200000,  broker: 'Binance', notes: 'Refresh for live price', lastUpdated: new Date().toISOString() },
+];
+
+const SEED_BANK = [
+  { id: 'seed-ibkr', name: 'IBKR USD Cash',  category: 'bank', currency: 'USD', value: 7908.38, cost: 7908.38, notes: 'Acct U16384716' },
+  { id: 'seed-bpi',  name: 'BPI Savings',     category: 'bank', currency: 'PHP', value: 120000,  cost: 120000  },
+  { id: 'seed-wise', name: 'Wise',             category: 'bank', currency: 'PHP', value: 160000,  cost: 160000  },
+  { id: 'seed-gotrade', name: 'GoTrade Cash',  category: 'bank', currency: 'USD', value: 1000,    cost: 1000, notes: 'Investment account cash' },
+  { id: 'seed-qmedia',  name: 'QMedia',        category: 'business', currency: 'PHP', value: 500000, cost: 500000, notes: 'Dividends ~₱550K/year every May' },
+  { id: 'seed-warehouse', name: 'Warehouse',   category: 'business', currency: 'PHP', value: 320000, cost: 320000 },
+  { id: 'seed-rolex',  name: 'Rolex Datejust 41', category: 'tangible', currency: 'PHP', value: 645000, cost: 645000 },
+  { id: 'seed-paintings', name: 'Paintings',   category: 'tangible', currency: 'PHP', value: 150000, cost: 150000 },
+  { id: 'seed-celeb',  name: 'Celebrity Club Membership', category: 'cat_membership', currency: 'PHP', value: 300000, cost: 300000 },
+];
+
 const SEED_INCOME = [];
 const SEED_EXPENSES = [];
 const SEED_CUSTOM_CATEGORIES = [];
@@ -364,7 +385,7 @@ const ASSET_TYPES = {
 const getAssetType = (h) => ASSET_TYPES[h.assetType] || ASSET_TYPES.stock;
 
 // ===== ROOT =====
-function PatrimonyApp() {
+export default function Patrimony() {
   const [view, setView] = useState('overview');
   const [assets, setAssets] = useState([]);
   const [holdings, setHoldings] = useState([]);
@@ -507,7 +528,6 @@ function PatrimonyApp() {
     })();
   }, []);
 
-  // IndexedDB via Dexie is reliable — simple debounced save, no retries needed
   const persist = (overrides = {}) => {
     const payload = {
       version: STORAGE_VERSION,
@@ -517,16 +537,17 @@ function PatrimonyApp() {
     };
     pendingJson.current = JSON.stringify(payload);
     setSaveToast('saved');
-    setTimeout(() => setSaveToast(null), 1000);
+    setTimeout(() => setSaveToast(null), 1200);
     clearTimeout(persistTimer.current);
     persistTimer.current = setTimeout(async () => {
       const json = pendingJson.current;
       if (!json) return;
       try {
         await storage.set(STORAGE_KEY, json);
+        // Backup 5s later
         setTimeout(() => { writeBackup(JSON.parse(json)).catch(() => {}); }, 5000);
       } catch (err) {
-        console.error('Persist error:', err);
+        console.error('Persist failed:', err);
         setSaveToast('error');
         setTimeout(() => setSaveToast(null), 4000);
       }
@@ -639,7 +660,7 @@ function PatrimonyApp() {
     await persist({ assets: reassignedAssets, customCategories: nextCustom });
   };
 
-  // Refresh prices via Next.js server-side proxy — no CORS issues on any device
+  // Refresh stock prices
   const refreshPrices = async () => {
     if (holdings.length === 0) return;
     setRefreshing(true);
@@ -652,13 +673,13 @@ function PatrimonyApp() {
     let updatedCount = 0;
     const errors = [];
 
-    // ── STOCKS via /api/prices server route (no CORS, works everywhere) ───────
+    // ── STOCKS via /api/prices (server-side proxy, no CORS issues) ────────────
     if (stockHoldings.length > 0) {
       const symbols = [...new Set(stockHoldings.map(h => h.ticker))].join(',');
       try {
         const res = await fetch(`/api/prices?type=stock&symbols=${symbols}&fxRate=${fxRates.USD}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const { prices, source, error } = await res.json();
+        const { prices, error } = await res.json();
         if (error) throw new Error(error);
         Object.entries(prices).forEach(([symbol, phpPrice]) => {
           updated = updated.map(h =>
@@ -666,11 +687,10 @@ function PatrimonyApp() {
           );
           updatedCount++;
         });
-        if (source) console.log('Stock prices from:', source);
       } catch (e) { errors.push(`Stocks: ${e.message}`); }
     }
 
-    // ── CRYPTO via /api/prices server route ────────────────────────────────
+    // ── CRYPTO via /api/prices ────────────────────────────────────────────────
     if (cryptoHoldings.length > 0) {
       const ID_MAP = {
         BTC: 'bitcoin', ETH: 'ethereum', SOL: 'solana', BNB: 'binancecoin',
@@ -3671,13 +3691,5 @@ function Select({ value, onChange, options }) {
       style={{ background: T.surface2, border: `1px solid ${T.border2}`, color: T.text }}>
       {options.map(o => <option key={o.value} value={o.value} style={{ background: T.surface }}>{o.label}</option>)}
     </select>
-  );
-}
-
-export default function PatrimonyWithBoundary() {
-  return (
-    <ErrorBoundary>
-      <PatrimonyApp />
-    </ErrorBoundary>
   );
 }
