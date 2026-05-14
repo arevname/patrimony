@@ -46,8 +46,9 @@ const T = {
 
 // ===== CONFIG =====
 // Keys use pw_ prefix - confirmed working in storage diagnostics
-const STORAGE_KEY = 'pw_pat_v3';
-const STORAGE_VERSION = 10;
+const STORAGE_KEY = 'pw_pat_v4';
+const STORAGE_VERSION = 11;
+const INSTALL_FLAG = 'pw_installed_v4';
 const SNAPSHOT_KEY = 'pw_pat_snaps';
 const BACKUP_PREFIX = 'pw_pat_bk';
 const BACKUP_INDEX_KEY = 'pw_pat_bkidx';
@@ -506,6 +507,17 @@ export default function Patrimony() {
       }
       setLoaded(true);
     })();
+  // On fresh install, wipe ALL previous storage so no old data bleeds through
+  useEffect(() => {
+    (async () => {
+      const installed = await storage.get(INSTALL_FLAG);
+      if (!installed) {
+        const { keys } = await storage.list('pw_');
+        for (const k of keys) { try { await storage.delete(k); } catch {} }
+        await storage.set(INSTALL_FLAG, '1');
+      }
+    })();
+  }, []);
   }, []);
 
   const persist = (overrides = {}) => {
