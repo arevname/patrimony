@@ -46,8 +46,8 @@ const T = {
 
 // ===== CONFIG =====
 // Keys use pw_ prefix - confirmed working in storage diagnostics
-const STORAGE_KEY = 'pw_pat_main';
-const STORAGE_VERSION = 9;
+const STORAGE_KEY = 'pw_pat_v2';
+const STORAGE_VERSION = 10;
 const SNAPSHOT_KEY = 'pw_pat_snaps';
 const BACKUP_PREFIX = 'pw_pat_bk';
 const BACKUP_INDEX_KEY = 'pw_pat_bkidx';
@@ -477,7 +477,7 @@ export default function Patrimony() {
     (async () => {
       let found = false;
       // Try current key first
-      const tryKeys = ['pw_pat_main', 'pat9', 'patrimony_store_v8', 'patrimony_data'];
+      const tryKeys = ['pw_pat_v2', 'pat9', 'patrimony_store_v8', 'patrimony_data'];
       for (const key of tryKeys) {
         if (found) break;
         const r = await storageGet(key);
