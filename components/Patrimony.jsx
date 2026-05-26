@@ -301,10 +301,6 @@ const toMonthlyNet = (item) => {
 };
 
 // ===== SEED =====
-const SEED_HOLDINGS = [];
-
-const SEED_BANK = [];
-
 const SEED_INCOME = [];
 const SEED_EXPENSES = [];
 const SEED_CUSTOM_CATEGORIES = [];
@@ -427,9 +423,9 @@ export default function Patrimony() {
   // so they always appear even when existing storage data is found.
   const applyDataBlob = (d) => {
     if (!d) return;
-    setAssets(d.assets?.length ? d.assets : SEED_BANK);
+    setAssets(d.assets || []);
     const migHoldings = (d.holdings || []).map(h => ({ ...h, assetType: h.assetType || 'stock' }));
-    setHoldings(migHoldings.length ? migHoldings : SEED_HOLDINGS);
+    setHoldings(migHoldings);
     setDebts(d.debts || []);
     // Income: merge seeds with stored, add seeds missing by ID
     const storedIncome = (d.income || []).map(i => ({ ...i, taxTreatment: i.taxTreatment || 'none' }));
