@@ -503,6 +503,8 @@ export default function Patrimony() {
       }
       setLoaded(true);
     })();
+  }, []);
+
   // On fresh install, wipe ALL previous storage so no old data bleeds through
   useEffect(() => {
     (async () => {
@@ -513,18 +515,6 @@ export default function Patrimony() {
         await storage.set(INSTALL_FLAG, '1');
       }
     })();
-  // On fresh install, wipe ALL previous storage so no old data bleeds through
-  useEffect(() => {
-    (async () => {
-      const installed = await storage.get(INSTALL_FLAG);
-      if (!installed) {
-        const { keys } = await storage.list('pw_');
-        for (const k of keys) { try { await storage.delete(k); } catch {} }
-        await storage.set(INSTALL_FLAG, '1');
-      }
-    })();
-  }, []);
-  }, []);
   }, []);
 
   const persist = (overrides = {}) => {
