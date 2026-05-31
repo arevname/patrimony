@@ -1,10 +1,10 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Patrimony',
+  title: 'Jadera',
   description: 'Personal wealth ledger',
   manifest: '/manifest.json',
-  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Patrimony' },
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Jadera' },
 };
 
 export const viewport = {

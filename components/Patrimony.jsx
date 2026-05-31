@@ -929,7 +929,7 @@ export default function Patrimony() {
   if (!loaded) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: T.bg }}>
-        <div style={{ color: T.textDim }}>Loading Patrimony…</div>
+        <div style={{ color: T.textDim }}>Loading Jadera…</div>
       </div>
     );
   }
@@ -974,10 +974,10 @@ export default function Patrimony() {
                 </div>
               </div>
               <p className="text-sm mb-2" style={{ color: T.text }}>
-                A previous version of Patrimony saved an automatic backup containing <strong>{recoveryOffer.itemCount}</strong> {recoveryOffer.itemCount === 1 ? 'item' : 'items'} (assets, holdings, income, spending). Restore it now?
+                A previous version of Jadera saved an automatic backup containing <strong>{recoveryOffer.itemCount}</strong> {recoveryOffer.itemCount === 1 ? 'item' : 'items'} (assets, holdings, income, spending). Restore it now?
               </p>
               <p className="text-xs mb-5 italic" style={{ color: T.textFaint }}>
-                If you decline, Patrimony starts with seed data and your backup stays safe in storage — you can restore it later from the header button.
+                If you decline, Jadera starts with seed data and your backup stays safe in storage — you can restore it later from the header button.
               </p>
               <div className="flex gap-2">
                 <button onClick={() => setRecoveryOffer(null)} className="flex-1 py-2.5 rounded-full text-sm hover:bg-white/5"
@@ -1048,7 +1048,7 @@ export default function Patrimony() {
                   Personal Wealth Ledger
                 </div>
                 <h1 className="font-display text-4xl md:text-5xl">
-                  <span style={{ color: T.accent }}>Patrimony</span>{' '}
+                  <span style={{ color: T.accent }}>Jadera</span>{' '}
                   <span className="italic" style={{ color: T.textFaint, fontSize: '0.6em', verticalAlign: 'middle' }}>v9</span>
                 </h1>
                 <div className="flex items-center gap-2 mt-3">
@@ -1069,11 +1069,11 @@ export default function Patrimony() {
                             const d = JSON.parse(ev.target.result);
                             // Sanity check: must look like Patrimony backup
                             if (!d.version || (!d.assets && !d.holdings && !d.income)) {
-                              alert('This file does not look like a Patrimony backup.');
+                              alert('This file does not look like a Jadera backup.');
                               return;
                             }
                             const itemCount = (d.assets?.length || 0) + (d.holdings?.length || 0) + (d.income?.length || 0) + (d.spending?.length || 0);
-                            if (!window.confirm(`Restore from this backup? It contains ${itemCount} items and will replace everything currently in Patrimony.`)) {
+                            if (!window.confirm(`Restore from this backup? It contains ${itemCount} items and will replace everything currently in Jadera.`)) {
                               return;
                             }
                             // Replace state from backup
@@ -2888,7 +2888,7 @@ function HistoryView({ snapshots, totals }) {
           <div className="py-10 text-center">
             <History className="w-10 h-10 mx-auto mb-3" style={{ color: T.textFaint }} />
             <p className="text-sm" style={{ color: T.textDim }}>Need at least 2 days of snapshots to chart history.</p>
-            <p className="text-xs mt-1" style={{ color: T.textFaint }}>Each day you open Patrimony, a snapshot is taken automatically.</p>
+            <p className="text-xs mt-1" style={{ color: T.textFaint }}>Each day you open Jadera, a snapshot is taken automatically.</p>
           </div>
         </Card>
       ) : (
@@ -3476,7 +3476,7 @@ function Modal({ kind, editing, onClose, onSave, fxRates, onSaveFx, onImport, as
               </Field>
               {form.linkedAssetId && (
                 <p className="text-xs italic" style={{ color: T.textFaint }}>
-                  Note: linking an account lets you reference its balance, but Patrimony doesn't auto-pull bank data — you still update the bank balance manually under Wealth, and adjust this goal's "current" as needed.
+                  Note: linking an account lets you reference its balance, but Jadera doesn't auto-pull bank data — you still update the bank balance manually under Wealth, and adjust this goal's "current" as needed.
                 </p>
               )}
               <Field label="Notes (optional)">
