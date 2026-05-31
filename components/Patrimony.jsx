@@ -42,7 +42,12 @@ const T = {
   blueBg:      'rgba(107, 143, 181, 0.12)',
   purple:      '#9B7FE8',
   purpleBg:    'rgba(155, 127, 232, 0.12)',
+  yellow:      '#E5B95C',
+  yellowBg:    'rgba(229, 185, 92, 0.12)',
 };
+
+// Savings-rate tiers: >20% strong (green), 10–20% ok (yellow), <10% weak (red)
+const savingsRateColor = (rate) => rate >= 0.2 ? T.green : rate >= 0.1 ? T.yellow : T.red;
 
 // ===== CONFIG =====
 // Keys use pw_ prefix - confirmed working in storage diagnostics
@@ -811,6 +816,8 @@ export default function Patrimony() {
       totalDebt: Math.round(totals.totalDebt),
       liquidCash: Math.round(totals.liquidCash),
       stocksValue: Math.round(totals.stocksValue),
+      monthlyIncome: Math.round(totals.monthlyIncome),
+      monthlyExpenses: Math.round(totals.monthlyExpenses),
     };
     let next;
     if (!last) {
@@ -826,7 +833,7 @@ export default function Patrimony() {
       setSnapshots(next);
       setTimeout(() => persistSnapshots(next), 5000);
     }
-  }, [totals.netWorth, totals.grossAssets, totals.totalDebt, totals.liquidCash, totals.stocksValue, loaded]);
+  }, [totals.netWorth, totals.grossAssets, totals.totalDebt, totals.liquidCash, totals.stocksValue, totals.monthlyIncome, totals.monthlyExpenses, loaded]);
 
   const forecast = useMemo(() => {
     const data = [];
@@ -1297,6 +1304,36 @@ function Overview({ totals, forecast, insights, milestones, holdings, spending, 
   const recentSnaps = snapshots.slice(-30);
   const nwTrend = recentSnaps.length >= 2 ? recentSnaps[recentSnaps.length - 1].netWorth - recentSnaps[0].netWorth : 0;
 
+  // Feature 1.1 — net worth history with time-range filter
+  const [nwRange, setNwRange] = useState('3M');
+  const nwHistory = useMemo(() => {
+    const days = { '1M': 30, '3M': 90, '6M': 180, '1Y': 365, 'ALL': Infinity }[nwRange] ?? 90;
+    if (days === Infinity) return snapshots;
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    return snapshots.filter(s => new Date(s.date) >= cutoff);
+  }, [snapshots, nwRange]);
+
+  // Feature 1.3 — savings rate per month (last 6 months); current month uses live totals
+  const savingsMonthly = useMemo(() => {
+    const byMonth = {};
+    snapshots.forEach(s => {
+      if (s.monthlyIncome == null) return;
+      byMonth[s.date.slice(0, 7)] = s; // snapshots are chronological → latest day of month wins
+    });
+    byMonth[today.slice(0, 7)] = { monthlyIncome: totals.monthlyIncome, monthlyExpenses: totals.monthlyExpenses };
+    const rateOf = (inc, exp) => inc > 0 ? (inc - exp) / inc : 0;
+    return Object.keys(byMonth).sort().map(m => ({
+      month: m,
+      label: new Date(m + '-01').toLocaleDateString('en-US', { month: 'short' }),
+      rate: rateOf(byMonth[m].monthlyIncome, byMonth[m].monthlyExpenses),
+    })).slice(-6);
+  }, [snapshots, totals.monthlyIncome, totals.monthlyExpenses, today]);
+
+  const curRate = totals.savingsRate;
+  const prevRate = savingsMonthly.length >= 2 ? savingsMonthly[savingsMonthly.length - 2].rate : null;
+  const rateTrend = prevRate == null ? null : curRate - prevRate;
+
   return (
     <div className="fade-in space-y-6">
 
@@ -1353,16 +1390,60 @@ function Overview({ totals, forecast, insights, milestones, holdings, spending, 
         </div>
       </div>
 
-      {/* 2. THREE STAT CARDS */}
-      <div className="grid grid-cols-3 gap-4">
+      {/* 1.1 NET WORTH OVER TIME */}
+      <Card>
+        <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+          <CardHeader title="Net Worth Over Time" subtitle="Your wealth trajectory" inline />
+          <div className="flex gap-1 p-1 rounded-full" style={{ background: T.surface2 }}>
+            {['1M', '3M', '6M', '1Y', 'ALL'].map(r => (
+              <button key={r} onClick={() => setNwRange(r)}
+                className="px-3 py-1 rounded-full text-xs transition-all"
+                style={nwRange === r ? { background: T.accent, color: T.bg, fontWeight: 600 } : { color: T.textDim }}>
+                {r}
+              </button>
+            ))}
+          </div>
+        </div>
+        {snapshots.length < 2 ? (
+          <div className="py-12 text-center">
+            <LineIcon className="w-10 h-10 mx-auto mb-3" style={{ color: T.textFaint }} />
+            <p className="text-sm" style={{ color: T.textDim }}>Your wealth story starts today. Come back tomorrow.</p>
+          </div>
+        ) : nwHistory.length < 2 ? (
+          <div className="py-12 text-center">
+            <p className="text-sm" style={{ color: T.textDim }}>No data in this window yet. Try a longer range.</p>
+          </div>
+        ) : (
+          <div className="h-56">
+            <ResponsiveContainer>
+              <AreaChart data={nwHistory} margin={{ top: 10, right: 12, bottom: 0, left: 0 }}>
+                <defs><linearGradient id="nwHistGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={T.accent} stopOpacity={0.3} />
+                  <stop offset="100%" stopColor={T.accent} stopOpacity={0} />
+                </linearGradient></defs>
+                <CartesianGrid stroke={T.border} vertical={false} />
+                <XAxis dataKey="date" stroke={T.textFaint} tick={{ fontSize: 10, fill: T.textFaint }} axisLine={false} tickLine={false} minTickGap={24} />
+                <YAxis stroke={T.textFaint} tick={{ fontSize: 10, fill: T.textFaint }} axisLine={false} tickLine={false} tickFormatter={fmtK} width={52} domain={['auto', 'auto']} />
+                <Tooltip contentStyle={{ background: T.surface2, border: `1px solid ${T.border2}`, borderRadius: 10, fontSize: 12, color: T.text }} formatter={(v) => fmt(v)} labelStyle={{ color: T.textFaint }} />
+                <Area type="monotone" dataKey="netWorth" stroke={T.accent} strokeWidth={2} fill="url(#nwHistGrad)" dot={false} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </Card>
+
+      {/* 2. STAT CARDS */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Total Assets',      value: totals.grossAssets, color: T.green,  sub: `${Object.values(totals.byCategory).filter(v => v > 0).length} categories` },
-          { label: 'Total Liabilities', value: totals.totalDebt,   color: T.red,    sub: totals.monthlyDebtService > 0 ? `${fmtK(totals.monthlyDebtService)}/mo service` : 'No debt' },
-          { label: 'Net Cash Flow',     value: totals.monthlyNet,  color: totals.monthlyNet >= 0 ? T.green : T.red, sub: `${(totals.savingsRate * 100).toFixed(0)}% savings rate` },
-        ].map(({ label, value, color, sub }) => (
+          { label: 'Total Assets',      display: fmtK(totals.grossAssets), color: T.green, sub: `${Object.values(totals.byCategory).filter(v => v > 0).length} categories` },
+          { label: 'Total Liabilities', display: fmtK(totals.totalDebt),   color: T.red,   sub: totals.monthlyDebtService > 0 ? `${fmtK(totals.monthlyDebtService)}/mo service` : 'No debt' },
+          { label: 'Net Cash Flow',     display: fmtK(totals.monthlyNet),  color: totals.monthlyNet >= 0 ? T.green : T.red, sub: `${(totals.savingsRate * 100).toFixed(0)}% savings rate` },
+          { label: 'Savings Rate',      display: `${(curRate * 100).toFixed(0)}%`, color: savingsRateColor(curRate),
+            sub: rateTrend == null ? 'this month' : `${rateTrend >= 0 ? '↑' : '↓'} ${Math.abs(rateTrend * 100).toFixed(0)}pt vs last mo` },
+        ].map(({ label, display, color, sub }) => (
           <div key={label} style={{ background: T.surface, borderRadius: 16, padding: '20px 24px', boxShadow: '0 2px 12px rgba(0,0,0,0.4)', border: `1px solid ${T.border}` }}>
             <div className="text-xs uppercase tracking-widest mb-2" style={{ color: T.textFaint }}>{label}</div>
-            <div className="font-display num text-2xl md:text-3xl" style={{ letterSpacing: '-0.02em', color }}>{fmtK(value)}</div>
+            <div className="font-display num text-2xl md:text-3xl" style={{ letterSpacing: '-0.02em', color }}>{display}</div>
             <div className="text-xs mt-1.5" style={{ color: T.textFaint }}>{sub}</div>
           </div>
         ))}
@@ -1507,6 +1588,33 @@ function Overview({ totals, forecast, insights, milestones, holdings, spending, 
           </div>
         )}
       </Card>
+
+      {/* 1.3 SAVINGS RATE TREND — last 6 months */}
+      {savingsMonthly.length >= 2 && (
+        <Card>
+          <CardHeader title="Savings Rate Trend" subtitle="Last 6 months" />
+          <div className="h-44 mt-4">
+            <ResponsiveContainer>
+              <BarChart data={savingsMonthly} margin={{ top: 10, right: 8, bottom: 0, left: 0 }}>
+                <CartesianGrid stroke={T.border} vertical={false} />
+                <XAxis dataKey="label" stroke={T.textFaint} tick={{ fontSize: 11, fill: T.textFaint }} axisLine={false} tickLine={false} />
+                <YAxis stroke={T.textFaint} tick={{ fontSize: 10, fill: T.textFaint }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v * 100)}%`} width={42} />
+                <Tooltip contentStyle={{ background: T.surface2, border: `1px solid ${T.border2}`, borderRadius: 10, fontSize: 12, color: T.text }}
+                  formatter={(v) => [`${(v * 100).toFixed(1)}%`, 'Savings rate']} labelStyle={{ color: T.textFaint }} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
+                <ReferenceLine y={0.2} stroke={T.green} strokeDasharray="3 3" strokeOpacity={0.4} />
+                <Bar dataKey="rate" radius={[4, 4, 0, 0]}>
+                  {savingsMonthly.map((d, i) => <Cell key={i} fill={savingsRateColor(d.rate)} />)}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="flex items-center gap-4 mt-3 text-xs" style={{ color: T.textFaint }}>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full" style={{ background: T.green }}></span>&gt;20% strong</span>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full" style={{ background: T.yellow }}></span>10–20% ok</span>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full" style={{ background: T.red }}></span>&lt;10% low</span>
+          </div>
+        </Card>
+      )}
 
       {/* Savings Goals snapshot */}
       {goals.length > 0 && (
@@ -2196,8 +2304,10 @@ function Budget({ envelopes, totals, expenses, customLabels, onSave, onSaveLabel
           <Stat label="Total Monthly Cap" value={fmt(totalCap)} hint={Object.keys(drafts).length + ' categories'} />
           <Stat label="Spent So Far" value={fmt(totalSpent)} accent={totalSpent > totalCap && totalCap > 0 ? T.red : T.text}
             hint={totalCap > 0 ? `${(totalSpent / totalCap * 100).toFixed(0)}% of cap` : ''} />
-          <Stat label="Remaining" value={fmt(Math.max(0, totalCap - totalSpent))} accent={T.green}
-            hint={totalCap > 0 && totalSpent > totalCap ? `over by ${fmt(totalSpent - totalCap)}` : ''} />
+          <Stat label={totalSpent > totalCap ? 'Overall Deficit' : 'Overall Surplus'}
+            value={fmt(Math.abs(totalCap - totalSpent))}
+            accent={totalSpent > totalCap ? T.red : T.green}
+            hint={totalCap > 0 ? (totalSpent > totalCap ? 'over total budget' : 'under total budget') : ''} />
         </div>
       </Card>
 
@@ -2245,18 +2355,20 @@ function Budget({ envelopes, totals, expenses, customLabels, onSave, onSaveLabel
                   </div>
                 </div>
                 {cap > 0 && (
-                  <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: T.surface }}>
-                    <div className="h-full rounded-full transition-all" style={{
-                      width: pct + '%',
-                      background: overCap ? T.red : (nearCap ? T.accent : cat.color)
-                    }}></div>
-                  </div>
-                )}
-                {overCap && (
-                  <p className="text-xs mt-1.5" style={{ color: T.red }}>Over by {fmt(spent - cap)} this month</p>
-                )}
-                {nearCap && (
-                  <p className="text-xs mt-1.5" style={{ color: T.accent }}>{(100 - pct).toFixed(0)}% remaining</p>
+                  <>
+                    <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: T.surface }}>
+                      <div className="h-full rounded-full transition-all" style={{
+                        width: pct + '%',
+                        background: overCap ? T.red : (nearCap ? T.yellow : T.green)
+                      }}></div>
+                    </div>
+                    <div className="flex items-center justify-between text-xs mt-1.5 num">
+                      <span style={{ color: T.textFaint }}>{fmt(spent)} used · {(cap > 0 ? (spent / cap) * 100 : 0).toFixed(0)}%</span>
+                      <span style={{ color: overCap ? T.red : T.green }}>
+                        {overCap ? `${fmt(spent - cap)} over` : `${fmt(cap - spent)} left`}
+                      </span>
+                    </div>
+                  </>
                 )}
               </div>
             );
