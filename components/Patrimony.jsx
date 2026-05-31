@@ -22,26 +22,26 @@ import {
 
 // ===== THEME =====
 const T = {
-  bg:        '#0F0E0C',
-  surface:   '#181614',
-  surface2:  '#221F1B',
-  surface3:  '#2D2925',
-  border:    '#2E2B27',
-  border2:   '#3D3934',
-  gold:      '#C9A961',
-  goldBright:'#E5C77B',
-  goldDim:   '#8B7340',
-  text:      '#E8E4DB',
-  textDim:   '#9A9387',
-  textFaint: '#5C564E',
-  green:     '#6B9E50',
-  greenBg:   'rgba(107, 158, 80, 0.12)',
-  red:       '#C25450',
-  redBg:     'rgba(194, 84, 80, 0.12)',
-  blue:      '#6B8FB5',
-  blueBg:    'rgba(107, 143, 181, 0.12)',
-  purple:    '#9D7FBF',
-  purpleBg:  'rgba(157, 127, 191, 0.12)',
+  bg:          '#0A0A0A',
+  surface:     '#111111',
+  surface2:    '#1A1A1A',
+  surface3:    '#222222',
+  border:      '#1F1F1F',
+  border2:     '#2A2A2A',
+  accent:      '#00C896',
+  accentBright:'#00E5A8',
+  accentDim:   '#00956E',
+  text:        '#F0F0F0',
+  textDim:     '#8A8A8A',
+  textFaint:   '#444444',
+  green:       '#00C896',
+  greenBg:     'rgba(0, 200, 150, 0.12)',
+  red:         '#FF4D4D',
+  redBg:       'rgba(255, 77, 77, 0.12)',
+  blue:        '#6B8FB5',
+  blueBg:      'rgba(107, 143, 181, 0.12)',
+  purple:      '#9B7FE8',
+  purpleBg:    'rgba(155, 127, 232, 0.12)',
 };
 
 // ===== CONFIG =====
@@ -64,7 +64,7 @@ const TAX_TREATMENTS = {
 };
 
 const ASSET_CATEGORIES = {
-  bank:       { label: 'Bank Accounts',      short: 'Bank',      icon: Landmark,  color: T.gold,    tint: 'rgba(201, 169, 97, 0.12)' },
+  bank:       { label: 'Bank Accounts',      short: 'Bank',      icon: Landmark,  color: T.accent,    tint: 'rgba(0, 200, 150, 0.12)' },
   insurance:  { label: 'Insurance & VUL',    short: 'Insurance', icon: Shield,    color: '#5C8A8A', tint: 'rgba(92, 138, 138, 0.12)' },
   tangible:   { label: 'Tangible Assets',    short: 'Tangible',  icon: Gem,       color: '#B8865C', tint: 'rgba(184, 134, 92, 0.12)' },
   realestate: { label: 'Real Estate',        short: 'Property',  icon: Home,      color: '#A47148', tint: 'rgba(164, 113, 72, 0.12)' },
@@ -81,11 +81,11 @@ const CUSTOM_CATEGORY_ICONS = {
   BookOpen, Smartphone,
 };
 
-// Curated color palette for custom categories — earth tones + accents that match the gold/dark theme.
+// Curated color palette for custom categories — dark fintech palette: accent green, purple, blue, neutrals.
 const CUSTOM_CATEGORY_COLORS = [
-  '#C9A961', '#E5C77B', '#B8865C', '#A47148',
+  '#00C896', '#00E5A8', '#B8865C', '#A47148',
   '#9A8262', '#7E8C7A', '#5C8A8A', '#7A8B9E',
-  '#9D7FBF', '#C25450', '#6B9E50', '#6B8FB5',
+  '#9B7FE8', '#C25450', '#6B9E50', '#6B8FB5',
 ];
 
 // Convert hex like '#7A8B9E' to a low-alpha rgba tint for backgrounds (matches the existing built-ins).
@@ -139,10 +139,10 @@ const SPEND_CATEGORIES = {
   housing:       { label: 'Housing & Rent',        color: '#9A8262' },
   utilities:     { label: 'Utilities & Bills',     color: '#B8865C' },
   subscriptions: { label: 'Subscriptions',         color: '#9D7FBF' },
-  shopping:      { label: 'Shopping',              color: '#E5C77B' },
+  shopping:      { label: 'Shopping',              color: '#9B7FE8' },
   entertainment: { label: 'Entertainment',         color: '#7E8C7A' },
   health:        { label: 'Health & Wellness',     color: '#6B9E50' },
-  personal:      { label: 'Personal Care',         color: '#C9A961' },
+  personal:      { label: 'Personal Care',         color: '#00C896' },
   travel:        { label: 'Travel',                color: '#A04A47' },
   gifts:         { label: 'Gifts & Donations',     color: '#9D7FBF' },
   debt_payment:  { label: 'Debt Payments',         color: '#C25450' },
@@ -306,7 +306,7 @@ const SEED_EXPENSES = [];
 const SEED_CUSTOM_CATEGORIES = [];
 
 const HOLDING_TAGS = {
-  core:        { label: 'Core Hold',         color: T.gold,   bg: 'rgba(201, 169, 97, 0.15)' },
+  core:        { label: 'Core Hold',         color: T.accent,   bg: 'rgba(0, 200, 150, 0.15)' },
   confluence:  { label: 'Strong Confluence', color: T.green,  bg: T.greenBg },
   watch:       { label: 'Under Review',      color: T.blue,   bg: T.blueBg },
   offsystem:   { label: 'Off-System',        color: T.red,    bg: T.redBg },
@@ -944,15 +944,15 @@ export default function Patrimony() {
         .grain { background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.018) 1px, transparent 0); background-size: 4px 4px; }
         .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-        .gold-stripe { background: linear-gradient(90deg, transparent 0%, ${T.gold} 30%, ${T.goldBright} 50%, ${T.gold} 70%, transparent 100%); height: 1px; opacity: 0.6; }
+        .gold-stripe { background: linear-gradient(90deg, transparent 0%, ${T.accent} 30%, ${T.accentBright} 50%, ${T.accent} 70%, transparent 100%); height: 1px; opacity: 0.6; }
         .spin { animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        ::selection { background: ${T.gold}; color: ${T.bg}; }
+        ::selection { background: ${T.accent}; color: ${T.bg}; }
         .scrollbar-thin::-webkit-scrollbar { height: 8px; width: 8px; }
         .scrollbar-thin::-webkit-scrollbar-thumb { background: ${T.border2}; border-radius: 4px; }
         .scrollbar-thin::-webkit-scrollbar-track { background: ${T.surface}; }
         button, input, select, textarea { font-family: inherit; }
-        .fab { box-shadow: 0 8px 24px rgba(201, 169, 97, 0.35), 0 0 0 1px rgba(201, 169, 97, 0.5); }
+        .fab { box-shadow: 0 8px 24px rgba(0, 200, 150, 0.35), 0 0 0 1px rgba(0, 200, 150, 0.5); }
       `}</style>
 
       <div className="min-h-screen pb-24 grain" style={{ background: T.bg, color: T.text }}>
@@ -963,13 +963,13 @@ export default function Patrimony() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
             style={{ background: 'rgba(15, 14, 12, 0.92)', backdropFilter: 'blur(6px)' }}>
             <div className="rounded-2xl w-full max-w-md p-6 fade-in"
-              style={{ background: T.surface, border: `1px solid ${T.gold}` }}>
+              style={{ background: T.surface, border: `1px solid ${T.accent}` }}>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'rgba(201,169,97,0.15)', color: T.gold }}>
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'rgba(0, 200, 150,0.15)', color: T.accent }}>
                   <Save className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl" style={{ color: T.gold }}>Previous data found</h3>
+                  <h3 className="font-display text-2xl" style={{ color: T.accent }}>Previous data found</h3>
                   <p className="text-xs" style={{ color: T.textFaint }}>From {ago(recoveryOffer.timestamp)}</p>
                 </div>
               </div>
@@ -1002,7 +1002,7 @@ export default function Patrimony() {
                   });
                   setRecoveryOffer(null);
                 }} className="flex-1 py-2.5 rounded-full text-sm transition-all"
-                  style={{ background: T.gold, color: T.bg, fontWeight: 500 }}>
+                  style={{ background: T.accent, color: T.bg, fontWeight: 500 }}>
                   Restore
                 </button>
               </div>
@@ -1014,9 +1014,9 @@ export default function Patrimony() {
         {saveToast && (
           <div className="fixed top-4 right-4 z-50 px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2 fade-in"
             style={{
-              background: saveToast === 'saved' ? T.greenBg : saveToast === 'memory' ? 'rgba(201,169,97,0.15)' : T.redBg,
-              color: saveToast === 'saved' ? T.green : saveToast === 'memory' ? T.gold : T.red,
-              border: `1px solid ${saveToast === 'saved' ? T.green : saveToast === 'memory' ? T.gold : T.red}`,
+              background: saveToast === 'saved' ? T.greenBg : saveToast === 'memory' ? 'rgba(0, 200, 150,0.15)' : T.redBg,
+              color: saveToast === 'saved' ? T.green : saveToast === 'memory' ? T.accent : T.red,
+              border: `1px solid ${saveToast === 'saved' ? T.green : saveToast === 'memory' ? T.accent : T.red}`,
             }}>
             {saveToast === 'saved' ? <Sparkles className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
             {saveToast === 'saved' ? 'Saved' : saveToast === 'memory' ? 'In memory only' : 'Save failed!'}
@@ -1026,12 +1026,12 @@ export default function Patrimony() {
         {/* PERSISTENT STORAGE ERROR BANNER */}
         {storageError && (
           <div className="px-4 py-3 text-sm flex items-center gap-3"
-            style={{ background: 'rgba(201,169,97,0.12)', color: T.gold, borderBottom: `1px solid ${T.gold}` }}>
+            style={{ background: 'rgba(0, 200, 150,0.12)', color: T.accent, borderBottom: `1px solid ${T.accent}` }}>
             <AlertCircle className="w-4 h-4 shrink-0" />
             <div className="flex-1">Auto-save unavailable this session. Your data is safe while the app is open.</div>
             <button onClick={exportData}
               className="px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap"
-              style={{ background: T.gold, color: T.bg }}>
+              style={{ background: T.accent, color: T.bg }}>
               <Save className="w-3 h-3 inline mr-1" />Backup now
             </button>
             <button onClick={() => setStorageError(null)} className="p-1"><X className="w-4 h-4" /></button>
@@ -1048,7 +1048,7 @@ export default function Patrimony() {
                   Personal Wealth Ledger
                 </div>
                 <h1 className="font-display text-4xl md:text-5xl">
-                  <span style={{ color: T.gold }}>Patrimony</span>{' '}
+                  <span style={{ color: T.accent }}>Patrimony</span>{' '}
                   <span className="italic" style={{ color: T.textFaint, fontSize: '0.6em', verticalAlign: 'middle' }}>v9</span>
                 </h1>
                 <div className="flex items-center gap-2 mt-3">
@@ -1114,7 +1114,7 @@ export default function Patrimony() {
               </div>
               <div className="text-right">
                 <div className="text-xs uppercase tracking-widest mb-1" style={{ color: T.textFaint }}>Net Worth</div>
-                <div className="font-display text-4xl md:text-5xl num">{fmt(totals.netWorth)}</div>
+                <div className="font-display text-5xl md:text-6xl num" style={{ letterSpacing: '-0.03em' }}>{fmt(totals.netWorth)}</div>
                 <div className="text-sm mt-1 num flex items-center justify-end gap-3" style={{ color: T.textDim }}>
                   {totals.totalDebt > 0 && <span style={{ color: T.red }}>−{fmtK(totals.totalDebt)} debt</span>}
                   {totals.unrealizedGain !== 0 && (
@@ -1137,7 +1137,7 @@ export default function Patrimony() {
         {/* TABS */}
         <nav className="px-6 md:px-10 sticky top-0 z-20 backdrop-blur"
           style={{ borderBottom: `1px solid ${T.border}`, background: T.bg + 'd9' }}>
-          <div className="max-w-6xl mx-auto flex gap-1 overflow-x-auto scrollbar-thin">
+          <div className="max-w-6xl mx-auto flex gap-1.5 overflow-x-auto scrollbar-thin py-2.5">
             {[
               { id: 'overview',  label: 'Overview',  Icon: LayoutDashboard },
               { id: 'wealth',    label: 'Wealth',    Icon: Briefcase },
@@ -1153,10 +1153,15 @@ export default function Patrimony() {
               { id: 'insights',  label: 'Insights',  Icon: Lightbulb }
             ].map(t => (
               <button key={t.id} onClick={() => setView(t.id)}
-                className="px-3 md:px-4 py-3.5 text-sm transition-all flex items-center gap-2 whitespace-nowrap relative"
-                style={{ color: view === t.id ? T.gold : T.textDim, fontWeight: view === t.id ? 500 : 400 }}>
+                className="text-sm transition-all flex items-center gap-2 whitespace-nowrap"
+                style={{
+                  background: view === t.id ? T.accent : 'transparent',
+                  color: view === t.id ? T.bg : T.textDim,
+                  fontWeight: view === t.id ? 600 : 400,
+                  borderRadius: '999px',
+                  padding: '6px 16px'
+                }}>
                 <t.Icon className="w-4 h-4" /> {t.label}
-                {view === t.id && <span className="absolute bottom-0 left-0 right-0 h-px" style={{ background: T.gold }}></span>}
               </button>
             ))}
           </div>
@@ -1242,7 +1247,7 @@ export default function Patrimony() {
         {!modal && (
           <button onClick={() => setModal({ kind: 'spend' })}
             className="fixed bottom-6 right-6 z-30 fab w-14 h-14 rounded-full flex items-center justify-center hover:scale-105 transition-transform"
-            style={{ background: T.gold, color: T.bg }}>
+            style={{ background: T.accent, color: T.bg }}>
             <Plus className="w-6 h-6" strokeWidth={2.5} />
           </button>
         )}
@@ -1302,7 +1307,7 @@ function Overview({ totals, forecast, insights, milestones, holdings, spending, 
         <Stat label="Spent This Month" value={fmt(totals.monthlyExpenses)}
           hint={`${fmtK(totals.monthlyVariableSpending)} variable`} accent={T.red} />
         <Stat label="Today" value={fmt(todaySpending)}
-          hint={spending.filter(s => s.date === today).length + ' transactions'} accent={T.gold} />
+          hint={spending.filter(s => s.date === today).length + ' transactions'} accent={T.accent} />
       </section>
 
       {recentSnaps.length >= 2 && (
@@ -1313,7 +1318,7 @@ function Overview({ totals, forecast, insights, milestones, holdings, spending, 
               <span className="text-sm num" style={{ color: nwTrend >= 0 ? T.green : T.red }}>
                 {nwTrend >= 0 ? '+' : ''}{fmtK(nwTrend)}
               </span>
-              <button onClick={() => setView('history')} className="text-sm flex items-center gap-1 hover:gap-2 transition-all" style={{ color: T.gold }}>
+              <button onClick={() => setView('history')} className="text-sm flex items-center gap-1 hover:gap-2 transition-all" style={{ color: T.accent }}>
                 Full history <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -1322,13 +1327,13 @@ function Overview({ totals, forecast, insights, milestones, holdings, spending, 
             <ResponsiveContainer>
               <AreaChart data={recentSnaps} margin={{ top: 10, right: 16, bottom: 0, left: 0 }}>
                 <defs><linearGradient id="nwG" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={T.gold} stopOpacity={0.3} />
-                  <stop offset="100%" stopColor={T.gold} stopOpacity={0} />
+                  <stop offset="0%" stopColor={T.accent} stopOpacity={0.3} />
+                  <stop offset="100%" stopColor={T.accent} stopOpacity={0} />
                 </linearGradient></defs>
                 <XAxis dataKey="date" stroke={T.textFaint} tick={{ fontSize: 10, fill: T.textFaint }} axisLine={false} tickLine={false} />
                 <YAxis stroke={T.textFaint} tick={{ fontSize: 10, fill: T.textFaint }} axisLine={false} tickLine={false} tickFormatter={fmtK} width={50} domain={['auto', 'auto']} />
                 <Tooltip contentStyle={{ background: T.surface2, border: `1px solid ${T.border2}`, borderRadius: 12, fontSize: 12, color: T.text }} formatter={(v) => fmt(v)} />
-                <Area type="monotone" dataKey="netWorth" stroke={T.gold} strokeWidth={2} fill="url(#nwG)" />
+                <Area type="monotone" dataKey="netWorth" stroke={T.accent} strokeWidth={2} fill="url(#nwG)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -1376,7 +1381,7 @@ function Overview({ totals, forecast, insights, milestones, holdings, spending, 
             <div className="space-y-2.5 mt-3">
               {insights.slice(0, 3).map((ins, i) => <InsightTile key={i} ins={ins} compact />)}
               {insights.length > 3 && (
-                <button onClick={() => setView('insights')} className="text-sm flex items-center gap-1 hover:gap-2 transition-all" style={{ color: T.gold }}>
+                <button onClick={() => setView('insights')} className="text-sm flex items-center gap-1 hover:gap-2 transition-all" style={{ color: T.accent }}>
                   See {insights.length - 3} more <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -1390,7 +1395,7 @@ function Overview({ totals, forecast, insights, milestones, holdings, spending, 
         <Card>
           <div className="flex items-baseline justify-between mb-4">
             <CardHeader title="Savings Goals" subtitle={`${goals.length} active`} inline />
-            <button onClick={() => setView('goals')} className="text-sm flex items-center gap-1 hover:gap-2 transition-all" style={{ color: T.gold }}>
+            <button onClick={() => setView('goals')} className="text-sm flex items-center gap-1 hover:gap-2 transition-all" style={{ color: T.accent }}>
               All goals <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -1410,7 +1415,7 @@ function Overview({ totals, forecast, insights, milestones, holdings, spending, 
         <Card>
           <div className="flex items-baseline justify-between mb-4">
             <CardHeader title="Investments" subtitle={typeSummary} inline />
-            <button onClick={() => setView('stocks')} className="text-sm flex items-center gap-1 hover:gap-2 transition-all" style={{ color: T.gold }}>
+            <button onClick={() => setView('stocks')} className="text-sm flex items-center gap-1 hover:gap-2 transition-all" style={{ color: T.accent }}>
               Manage <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -1506,7 +1511,7 @@ function Wealth({ assets, totals, fxRates, customLabels, customCategories, categ
             <Plus className="w-3.5 h-3.5" /> Category
           </button>
           <button onClick={onAdd} className="px-4 py-2.5 rounded-full text-sm flex items-center gap-2 hover:opacity-90"
-            style={{ background: T.gold, color: T.bg, fontWeight: 500 }}>
+            style={{ background: T.accent, color: T.bg, fontWeight: 500 }}>
             <Plus className="w-4 h-4" /> Add asset
           </button>
         </div>
@@ -1655,7 +1660,7 @@ function Stocks({ holdings, totals, refreshing, refreshMsg, onAdd, onEdit, onDel
             <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'spin' : ''}`} />
             {refreshing ? 'Refreshing…' : 'Refresh prices'}
           </button>
-          <button onClick={onAdd} className="px-3.5 py-2 rounded-full text-sm flex items-center gap-1.5 hover:opacity-90" style={{ background: T.gold, color: T.bg, fontWeight: 500 }}>
+          <button onClick={onAdd} className="px-3.5 py-2 rounded-full text-sm flex items-center gap-1.5 hover:opacity-90" style={{ background: T.accent, color: T.bg, fontWeight: 500 }}>
             <Plus className="w-3.5 h-3.5" /> Add
           </button>
         </div>
@@ -1722,12 +1727,12 @@ function Stocks({ holdings, totals, refreshing, refreshMsg, onAdd, onEdit, onDel
       {typesPresent.length > 1 && (
         <div className="flex gap-1 p-1 rounded-full w-fit" style={{ background: T.surface2 }}>
           <button onClick={() => setTypeFilter('all')} className="px-4 py-1.5 rounded-full text-sm transition-all"
-            style={{ background: typeFilter === 'all' ? T.gold : 'transparent', color: typeFilter === 'all' ? T.bg : T.textDim, fontWeight: typeFilter === 'all' ? 500 : 400 }}>
+            style={{ background: typeFilter === 'all' ? T.accent : 'transparent', color: typeFilter === 'all' ? T.bg : T.textDim, fontWeight: typeFilter === 'all' ? 500 : 400 }}>
             All ({holdings.length})
           </button>
           {typesPresent.map(t => (
             <button key={t} onClick={() => setTypeFilter(t)} className="px-4 py-1.5 rounded-full text-sm transition-all"
-              style={{ background: typeFilter === t ? T.gold : 'transparent', color: typeFilter === t ? T.bg : T.textDim, fontWeight: typeFilter === t ? 500 : 400 }}>
+              style={{ background: typeFilter === t ? T.accent : 'transparent', color: typeFilter === t ? T.bg : T.textDim, fontWeight: typeFilter === t ? 500 : 400 }}>
               {ASSET_TYPES[t].short} ({breakdown[t].count})
             </button>
           ))}
@@ -1739,7 +1744,7 @@ function Stocks({ holdings, totals, refreshing, refreshMsg, onAdd, onEdit, onDel
           <div className="py-10 text-center">
             <CandlestickChart className="w-10 h-10 mx-auto mb-3" style={{ color: T.textFaint }} />
             <p className="text-sm mb-4" style={{ color: T.textDim }}>No holdings yet.</p>
-            <button onClick={onAdd} className="px-4 py-2 rounded-full text-sm inline-flex items-center gap-1.5" style={{ background: T.gold, color: T.bg }}>
+            <button onClick={onAdd} className="px-4 py-2 rounded-full text-sm inline-flex items-center gap-1.5" style={{ background: T.accent, color: T.bg }}>
               <Plus className="w-3.5 h-3.5" /> Add first holding
             </button>
           </div>
@@ -1868,14 +1873,14 @@ function Spending({ spending, totals, envelopes, customLabels, onAdd, onEdit, on
           <h2 className="font-display text-3xl">Daily Spending</h2>
           <p className="text-sm mt-1" style={{ color: T.textDim }}>Track every transaction. Tap the gold + button anywhere to log.</p>
         </div>
-        <button onClick={onAdd} className="px-4 py-2.5 rounded-full text-sm flex items-center gap-2 hover:opacity-90" style={{ background: T.gold, color: T.bg, fontWeight: 500 }}>
+        <button onClick={onAdd} className="px-4 py-2.5 rounded-full text-sm flex items-center gap-2 hover:opacity-90" style={{ background: T.accent, color: T.bg, fontWeight: 500 }}>
           <Plus className="w-4 h-4" /> Log spending
         </button>
       </div>
 
       <Card>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Stat label="Today" value={fmt(todayTotal)} hint={`${todayItems.length} transaction${todayItems.length === 1 ? '' : 's'}`} accent={T.gold} />
+          <Stat label="Today" value={fmt(todayTotal)} hint={`${todayItems.length} transaction${todayItems.length === 1 ? '' : 's'}`} accent={T.accent} />
           <Stat label="This Week" value={fmt(weekTotal)} hint={`${weekItems.length} transactions`} />
           <Stat label="This Month" value={fmt(monthTotal)} hint={`avg ${fmtK(dailyAvg)}/day`} />
           <Stat label="Projected Month" value={fmt(dailyAvg * 30)} hint="at current pace" accent={T.purple} />
@@ -1892,7 +1897,7 @@ function Spending({ spending, totals, envelopes, customLabels, onAdd, onEdit, on
                 <YAxis stroke={T.textFaint} tick={{ fontSize: 10, fill: T.textFaint }} axisLine={false} tickLine={false} tickFormatter={fmtK} width={50} />
                 <Tooltip contentStyle={{ background: T.surface2, border: `1px solid ${T.border2}`, borderRadius: 12, fontSize: 12, color: T.text }}
                   formatter={(v) => fmt(v)} labelFormatter={(l, p) => p[0]?.payload?.full || l} />
-                <Bar dataKey="total" fill={T.gold} radius={[3, 3, 0, 0]} />
+                <Bar dataKey="total" fill={T.accent} radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -1928,7 +1933,7 @@ function Spending({ spending, totals, envelopes, customLabels, onAdd, onEdit, on
                   <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: T.surface2 }}>
                     <div className="h-full rounded-full" style={{
                       width: cap > 0 ? Math.min(100, (amount / cap) * 100) + '%' : pct + '%',
-                      background: overCap ? T.red : (cat?.color || T.gold)
+                      background: overCap ? T.red : (cat?.color || T.accent)
                     }}></div>
                   </div>
                 </div>
@@ -1958,7 +1963,7 @@ function Spending({ spending, totals, envelopes, customLabels, onAdd, onEdit, on
           <div className="py-10 text-center">
             <WalletIcon className="w-10 h-10 mx-auto mb-3" style={{ color: T.textFaint }} />
             <p className="text-sm mb-4" style={{ color: T.textDim }}>No transactions for this period.</p>
-            <button onClick={onAdd} className="px-4 py-2 rounded-full text-sm inline-flex items-center gap-1.5" style={{ background: T.gold, color: T.bg }}>
+            <button onClick={onAdd} className="px-4 py-2 rounded-full text-sm inline-flex items-center gap-1.5" style={{ background: T.accent, color: T.bg }}>
               <Plus className="w-3.5 h-3.5" /> Log first transaction
             </button>
           </div>
@@ -1973,7 +1978,7 @@ function Spending({ spending, totals, envelopes, customLabels, onAdd, onEdit, on
                 <div key={date}>
                   <div className="flex items-baseline justify-between mb-2 pb-2" style={{ borderBottom: `1px solid ${T.border}` }}>
                     <div className="flex items-baseline gap-3">
-                      <span className="font-medium" style={{ color: isToday ? T.gold : T.text }}>{label}</span>
+                      <span className="font-medium" style={{ color: isToday ? T.accent : T.text }}>{label}</span>
                       <span className="text-xs num" style={{ color: T.textFaint }}>{date}</span>
                     </div>
                     <span className="num font-medium">{fmt(dayTotal)}</span>
@@ -1989,7 +1994,7 @@ function Spending({ spending, totals, envelopes, customLabels, onAdd, onEdit, on
                             <div className="text-xs flex items-center gap-2 flex-wrap" style={{ color: T.textFaint }}>
                               <span>{catLabel(s.category)}</span>
                               {s.paymentMethod && <span>· {s.paymentMethod}</span>}
-                              {s.tag && <span className="px-1.5 py-0.5 rounded" style={{ background: T.surface2, color: T.gold }}>#{s.tag}</span>}
+                              {s.tag && <span className="px-1.5 py-0.5 rounded" style={{ background: T.surface2, color: T.accent }}>#{s.tag}</span>}
                               {s.notes && <span className="italic">· {s.notes}</span>}
                             </div>
                           </div>
@@ -2046,7 +2051,7 @@ function Budget({ envelopes, totals, expenses, customLabels, onSave, onSaveLabel
           <p className="text-sm mt-1" style={{ color: T.textDim }}>Set monthly caps per category. Hover any category name to rename it. Warns at 85% and 100%.</p>
         </div>
         {dirty && (
-          <button onClick={handleSave} className="px-4 py-2.5 rounded-full text-sm flex items-center gap-2 hover:opacity-90" style={{ background: T.gold, color: T.bg, fontWeight: 500 }}>
+          <button onClick={handleSave} className="px-4 py-2.5 rounded-full text-sm flex items-center gap-2 hover:opacity-90" style={{ background: T.accent, color: T.bg, fontWeight: 500 }}>
             Save caps
           </button>
         )}
@@ -2092,7 +2097,7 @@ function Budget({ envelopes, totals, expenses, customLabels, onSave, onSaveLabel
                   </div>
                   <div className="flex items-center gap-2">
                     {suggestion > 0 && cap === 0 && (
-                      <button onClick={() => handleChange(catKey, suggestion)} className="text-xs px-2 py-1 rounded hover:bg-white/5" style={{ color: T.gold }}>
+                      <button onClick={() => handleChange(catKey, suggestion)} className="text-xs px-2 py-1 rounded hover:bg-white/5" style={{ color: T.accent }}>
                         suggest: {fmtK(suggestion)}
                       </button>
                     )}
@@ -2109,7 +2114,7 @@ function Budget({ envelopes, totals, expenses, customLabels, onSave, onSaveLabel
                   <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: T.surface }}>
                     <div className="h-full rounded-full transition-all" style={{
                       width: pct + '%',
-                      background: overCap ? T.red : (nearCap ? T.gold : cat.color)
+                      background: overCap ? T.red : (nearCap ? T.accent : cat.color)
                     }}></div>
                   </div>
                 )}
@@ -2117,7 +2122,7 @@ function Budget({ envelopes, totals, expenses, customLabels, onSave, onSaveLabel
                   <p className="text-xs mt-1.5" style={{ color: T.red }}>Over by {fmt(spent - cap)} this month</p>
                 )}
                 {nearCap && (
-                  <p className="text-xs mt-1.5" style={{ color: T.gold }}>{(100 - pct).toFixed(0)}% remaining</p>
+                  <p className="text-xs mt-1.5" style={{ color: T.accent }}>{(100 - pct).toFixed(0)}% remaining</p>
                 )}
               </div>
             );
@@ -2144,7 +2149,7 @@ function Goals({ goals, assets, fxRates, onAdd, onEdit, onDelete }) {
           <h2 className="font-display text-3xl">Savings Goals</h2>
           <p className="text-sm mt-1" style={{ color: T.textDim }}>Targets with deadlines. Linked accounts auto-update. Manual adjustments override.</p>
         </div>
-        <button onClick={onAdd} className="px-4 py-2.5 rounded-full text-sm flex items-center gap-2 hover:opacity-90" style={{ background: T.gold, color: T.bg, fontWeight: 500 }}>
+        <button onClick={onAdd} className="px-4 py-2.5 rounded-full text-sm flex items-center gap-2 hover:opacity-90" style={{ background: T.accent, color: T.bg, fontWeight: 500 }}>
           <Plus className="w-4 h-4" /> Add goal
         </button>
       </div>
@@ -2155,7 +2160,7 @@ function Goals({ goals, assets, fxRates, onAdd, onEdit, onDelete }) {
             <Flag className="w-10 h-10 mx-auto mb-3" style={{ color: T.textFaint }} />
             <p className="text-sm mb-1" style={{ color: T.textDim }}>No goals yet. Set one to start tracking pace.</p>
             <p className="text-xs mb-4" style={{ color: T.textFaint }}>Examples: emergency fund, Japan trip, house down payment, new car.</p>
-            <button onClick={onAdd} className="px-4 py-2 rounded-full text-sm inline-flex items-center gap-1.5" style={{ background: T.gold, color: T.bg }}>
+            <button onClick={onAdd} className="px-4 py-2 rounded-full text-sm inline-flex items-center gap-1.5" style={{ background: T.accent, color: T.bg }}>
               <Plus className="w-3.5 h-3.5" /> First goal
             </button>
           </div>
@@ -2224,7 +2229,7 @@ function GoalProgressCard({ goal, onEdit, onDelete, compact, achieved }) {
           <div className="relative h-full">
             <div className="h-full rounded-full transition-all" style={{
               width: pct + '%',
-              background: achieved ? T.green : (ahead ? T.green : T.gold)
+              background: achieved ? T.green : (ahead ? T.green : T.accent)
             }}></div>
             <div className="absolute top-0 bottom-0 w-px" style={{ left: expectedPct + '%', background: T.textDim, opacity: 0.5 }}></div>
           </div>
@@ -2238,7 +2243,7 @@ function GoalProgressCard({ goal, onEdit, onDelete, compact, achieved }) {
         <div className="flex items-center justify-between text-xs num" style={{ color: T.textFaint }}>
           <span>{pct.toFixed(0)}% saved</span>
           {!achieved && remaining > 0 && (
-            <span style={{ color: ahead ? T.green : T.gold }}>
+            <span style={{ color: ahead ? T.green : T.accent }}>
               {ahead ? '✓ on pace' : `need ${fmtK(monthlyNeed)}/mo`}
             </span>
           )}
@@ -2370,7 +2375,7 @@ function CashFlow({ income, expenses, totals, customLabels, onAddIncome, onEditI
         <div className="grid md:grid-cols-3 gap-6">
           <div>
             <div className="text-xs uppercase tracking-widest mb-1" style={{ color: T.textFaint }}>
-              Monthly In {hasDeductions && <span style={{ color: T.gold }}>· takehome</span>}
+              Monthly In {hasDeductions && <span style={{ color: T.accent }}>· takehome</span>}
             </div>
             <div className="font-display text-3xl num" style={{ color: T.green }}>{fmt(totals.monthlyIncome)}</div>
             <div className="text-xs mt-1 num" style={{ color: T.textFaint }}>
@@ -2400,7 +2405,7 @@ function CashFlow({ income, expenses, totals, customLabels, onAddIncome, onEditI
       <Card>
         <div className="flex items-center justify-between mb-4">
           <CardHeader title="Income" subtitle="Salary, commissions, dividends, business. Toggle tax treatment per item." inline />
-          <button onClick={onAddIncome} className="px-3.5 py-2 rounded-full text-sm flex items-center gap-1.5 hover:opacity-90" style={{ background: T.gold, color: T.bg, fontWeight: 500 }}>
+          <button onClick={onAddIncome} className="px-3.5 py-2 rounded-full text-sm flex items-center gap-1.5 hover:opacity-90" style={{ background: T.accent, color: T.bg, fontWeight: 500 }}>
             <Plus className="w-3.5 h-3.5" /> Add
           </button>
         </div>
@@ -2468,7 +2473,7 @@ function CashFlow({ income, expenses, totals, customLabels, onAddIncome, onEditI
       <Card>
         <div className="flex items-center justify-between mb-4">
           <CardHeader title="Recurring Expenses" subtitle="Fixed monthly outflows (rent, subscriptions, utilities)" inline />
-          <button onClick={onAddExpense} className="px-3.5 py-2 rounded-full text-sm flex items-center gap-1.5 hover:opacity-90" style={{ background: T.gold, color: T.bg, fontWeight: 500 }}>
+          <button onClick={onAddExpense} className="px-3.5 py-2 rounded-full text-sm flex items-center gap-1.5 hover:opacity-90" style={{ background: T.accent, color: T.bg, fontWeight: 500 }}>
             <Plus className="w-3.5 h-3.5" /> Add
           </button>
         </div>
@@ -2567,7 +2572,7 @@ function Forecast({ totals, forecast, months, setMonths, milestones, expenses, i
         <div className="flex gap-1 p-1 rounded-full" style={{ background: T.surface2 }}>
           {range.map(r => (
             <button key={r} onClick={() => setMonths(r)} className="px-4 py-1.5 rounded-full text-sm transition-all"
-              style={{ background: months === r ? T.gold : 'transparent', color: months === r ? T.bg : T.textDim, fontWeight: months === r ? 500 : 400 }}>
+              style={{ background: months === r ? T.accent : 'transparent', color: months === r ? T.bg : T.textDim, fontWeight: months === r ? 500 : 400 }}>
               {r === 60 ? '5y' : `${r}mo`}
             </button>
           ))}
@@ -2576,10 +2581,10 @@ function Forecast({ totals, forecast, months, setMonths, milestones, expenses, i
 
       {/* Salary cliff warning */}
       {hasSalaryCliff && (
-        <div className="p-4 rounded-xl flex gap-3" style={{ background: 'rgba(201,169,97,0.1)', border: `1px solid ${T.gold}` }}>
-          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: T.gold }} />
+        <div className="p-4 rounded-xl flex gap-3" style={{ background: 'rgba(0, 200, 150,0.1)', border: `1px solid ${T.accent}` }}>
+          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: T.accent }} />
           <div className="text-sm" style={{ color: T.text }}>
-            <strong style={{ color: T.gold }}>Income cliff ahead.</strong> Your salary ends in June. After that, monthly income drops to dividends only (~{fmt(totals.monthlyIncomeNet - 200000 * 0.775)}/mo estimated). The forecast below assumes current income continues — use Essential Only mode to see your floor.
+            <strong style={{ color: T.accent }}>Income cliff ahead.</strong> Your salary ends in June. After that, monthly income drops to dividends only (~{fmt(totals.monthlyIncomeNet - 200000 * 0.775)}/mo estimated). The forecast below assumes current income continues — use Essential Only mode to see your floor.
           </div>
         </div>
       )}
@@ -2594,10 +2599,10 @@ function Forecast({ totals, forecast, months, setMonths, milestones, expenses, i
             <button key={opt.id} onClick={() => setMode(opt.id)}
               className="p-4 rounded-xl text-left transition-all"
               style={{
-                background: mode === opt.id ? 'rgba(201,169,97,0.1)' : T.surface,
-                border: `1.5px solid ${mode === opt.id ? T.gold : T.border}`,
+                background: mode === opt.id ? 'rgba(0, 200, 150,0.1)' : T.surface,
+                border: `1.5px solid ${mode === opt.id ? T.accent : T.border}`,
               }}>
-              <div className="font-medium text-sm" style={{ color: mode === opt.id ? T.gold : T.text }}>{opt.label}</div>
+              <div className="font-medium text-sm" style={{ color: mode === opt.id ? T.accent : T.text }}>{opt.label}</div>
               <div className="text-xs mt-1" style={{ color: T.textFaint }}>{opt.sub}</div>
             </button>
           ))}
@@ -2625,14 +2630,14 @@ function Forecast({ totals, forecast, months, setMonths, milestones, expenses, i
                 <XAxis dataKey="label" stroke={T.textDim} tick={{ fontSize: 11, fill: T.textDim }} axisLine={false} tickLine={false} />
                 <YAxis stroke={T.textDim} tick={{ fontSize: 11, fill: T.textDim }} axisLine={false} tickLine={false} tickFormatter={fmtK} width={60} />
                 <Tooltip contentStyle={{ background: T.surface2, border: `1px solid ${T.border2}`, borderRadius: 12, fontSize: 12, color: T.text }} formatter={(v) => fmt(v)} />
-                <Line type="monotone" dataKey="cash" stroke={T.gold} strokeWidth={2.5} dot={false} name="Liquid Cash" />
+                <Line type="monotone" dataKey="cash" stroke={T.accent} strokeWidth={2.5} dot={false} name="Liquid Cash" />
                 <Line type="monotone" dataKey="netWorth" stroke={T.blue} strokeWidth={2.5} dot={false} name="Net Worth" strokeDasharray="4 4" />
               </LineChart>
             </ResponsiveContainer>
           </div>
         )}
         <div className="flex items-center gap-5 mt-4 text-sm" style={{ color: T.textDim }}>
-          <span className="flex items-center gap-2"><span className="w-3 h-0.5" style={{ background: T.gold }}></span>Liquid Cash</span>
+          <span className="flex items-center gap-2"><span className="w-3 h-0.5" style={{ background: T.accent }}></span>Liquid Cash</span>
           <span className="flex items-center gap-2"><span className="w-3 h-0 border-t border-dashed" style={{ borderColor: T.blue }}></span>Net Worth</span>
         </div>
       </Card>
@@ -2685,8 +2690,8 @@ function Forecast({ totals, forecast, months, setMonths, milestones, expenses, i
           <CardHeader title="Milestones" subtitle="When liquid cash reaches key marks" />
           <div className="space-y-3 mt-4">
             {milestones.map(m => (
-              <div key={m.target} className="flex items-center gap-4 p-4 rounded-xl" style={{ border: `1px solid ${T.border}`, background: T.surface }}>
-                <Target className="w-5 h-5 shrink-0" style={{ color: T.gold }} />
+              <div key={m.target} className="flex items-center gap-4 p-4" style={{ border: `1px solid ${T.border}`, background: T.surface, borderRadius: '16px', boxShadow: '0 2px 12px rgba(0,0,0,0.4)' }}>
+                <Target className="w-5 h-5 shrink-0" style={{ color: T.accent }} />
                 <div className="flex-1">
                   <div className="font-display text-xl num">{fmt(m.target)}</div>
                   <div className="text-xs" style={{ color: T.textFaint }}>liquid cash target</div>
@@ -2737,7 +2742,7 @@ function HistoryView({ snapshots, totals }) {
         <div className="flex gap-1 p-1 rounded-full" style={{ background: T.surface2 }}>
           {[7, 30, 90, 365, 9999].map(r => (
             <button key={r} onClick={() => setRange(r)} className="px-3 py-1.5 rounded-full text-sm transition-all"
-              style={{ background: range === r ? T.gold : 'transparent', color: range === r ? T.bg : T.textDim, fontWeight: range === r ? 500 : 400 }}>
+              style={{ background: range === r ? T.accent : 'transparent', color: range === r ? T.bg : T.textDim, fontWeight: range === r ? 500 : 400 }}>
               {r === 7 ? '7d' : r === 30 ? '30d' : r === 90 ? '90d' : r === 365 ? '1y' : 'All'}
             </button>
           ))}
@@ -2769,14 +2774,14 @@ function HistoryView({ snapshots, totals }) {
               <ResponsiveContainer>
                 <AreaChart data={dataToShow} margin={{ top: 10, right: 16, bottom: 0, left: 0 }}>
                   <defs><linearGradient id="histG" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={T.gold} stopOpacity={0.3} />
-                    <stop offset="100%" stopColor={T.gold} stopOpacity={0} />
+                    <stop offset="0%" stopColor={T.accent} stopOpacity={0.3} />
+                    <stop offset="100%" stopColor={T.accent} stopOpacity={0} />
                   </linearGradient></defs>
                   <CartesianGrid strokeDasharray="3 3" stroke={T.border} vertical={false} />
                   <XAxis dataKey="date" stroke={T.textDim} tick={{ fontSize: 10, fill: T.textDim }} axisLine={false} tickLine={false} />
                   <YAxis stroke={T.textDim} tick={{ fontSize: 11, fill: T.textDim }} axisLine={false} tickLine={false} tickFormatter={fmtK} width={60} domain={['auto', 'auto']} />
                   <Tooltip contentStyle={{ background: T.surface2, border: `1px solid ${T.border2}`, borderRadius: 12, fontSize: 12, color: T.text }} formatter={(v) => fmt(v)} />
-                  <Area type="monotone" dataKey="netWorth" stroke={T.gold} strokeWidth={2.5} fill="url(#histG)" name="Net Worth" />
+                  <Area type="monotone" dataKey="netWorth" stroke={T.accent} strokeWidth={2.5} fill="url(#histG)" name="Net Worth" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -2791,14 +2796,14 @@ function HistoryView({ snapshots, totals }) {
                   <XAxis dataKey="date" stroke={T.textDim} tick={{ fontSize: 10, fill: T.textDim }} axisLine={false} tickLine={false} />
                   <YAxis stroke={T.textDim} tick={{ fontSize: 11, fill: T.textDim }} axisLine={false} tickLine={false} tickFormatter={fmtK} width={60} />
                   <Tooltip contentStyle={{ background: T.surface2, border: `1px solid ${T.border2}`, borderRadius: 12, fontSize: 12, color: T.text }} formatter={(v) => fmt(v)} />
-                  <Line type="monotone" dataKey="liquidCash" stroke={T.gold} strokeWidth={2} dot={false} name="Liquid Cash" />
+                  <Line type="monotone" dataKey="liquidCash" stroke={T.accent} strokeWidth={2} dot={false} name="Liquid Cash" />
                   <Line type="monotone" dataKey="stocksValue" stroke={T.purple} strokeWidth={2} dot={false} name="Stocks" />
                   <Line type="monotone" dataKey="grossAssets" stroke={T.blue} strokeWidth={2} dot={false} name="Gross Assets" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
             <div className="flex items-center gap-5 mt-3 text-sm flex-wrap" style={{ color: T.textDim }}>
-              <span className="flex items-center gap-2"><span className="w-3 h-0.5" style={{ background: T.gold }}></span>Liquid Cash</span>
+              <span className="flex items-center gap-2"><span className="w-3 h-0.5" style={{ background: T.accent }}></span>Liquid Cash</span>
               <span className="flex items-center gap-2"><span className="w-3 h-0.5" style={{ background: T.purple }}></span>Stocks</span>
               <span className="flex items-center gap-2"><span className="w-3 h-0.5" style={{ background: T.blue }}></span>Gross Assets</span>
             </div>
@@ -2868,7 +2873,7 @@ function TaxView({ income, totals, holdings }) {
       {noTreatmentSet && income.length > 0 && (
         <Card>
           <div className="flex items-start gap-3 p-2">
-            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: T.gold }} />
+            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: T.accent }} />
             <div>
               <div className="font-medium mb-1">No tax deductions configured</div>
               <p className="text-sm" style={{ color: T.textDim }}>
@@ -3064,7 +3069,7 @@ function InsightTile({ ins, compact }) {
 
 // ===== SHARED UI =====
 function Card({ children }) {
-  return <div className="rounded-2xl p-6" style={{ background: T.surface, border: `1px solid ${T.border}` }}>{children}</div>;
+  return <div className="p-6" style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: '16px', boxShadow: '0 2px 12px rgba(0,0,0,0.4)' }}>{children}</div>;
 }
 function CardHeader({ title, subtitle, inline }) {
   return (
@@ -3110,7 +3115,7 @@ function EditableLabel({ currentValue, defaultValue, onSave, className, style, c
           className={`px-2 py-0.5 rounded outline-none ${className || ''}`}
           style={{
             background: T.surface2,
-            border: `1px solid ${T.gold}`,
+            border: `1px solid ${T.accent}`,
             color: T.text,
             minWidth: 120,
             ...style
@@ -3127,7 +3132,7 @@ function EditableLabel({ currentValue, defaultValue, onSave, className, style, c
         className="p-1 rounded hover:bg-white/5 opacity-0 group-hover/label:opacity-100 transition-opacity"
         title={customized ? 'Rename (currently customized)' : 'Rename'}
         aria-label="Rename">
-        <Pencil className="w-3 h-3" style={{ color: customized ? T.gold : T.textFaint }} />
+        <Pencil className="w-3 h-3" style={{ color: customized ? T.accent : T.textFaint }} />
       </button>
     </div>
   );
@@ -3147,7 +3152,7 @@ function EmptyTile({ text, actionLabel, onAction }) {
     <div className="py-8 text-center">
       <p className="text-sm mb-3" style={{ color: T.textDim }}>{text}</p>
       {actionLabel && (
-        <button onClick={onAction} className="text-sm inline-flex items-center gap-1 hover:gap-2 transition-all" style={{ color: T.gold }}>
+        <button onClick={onAction} className="text-sm inline-flex items-center gap-1 hover:gap-2 transition-all" style={{ color: T.accent }}>
           {actionLabel} <ArrowRight className="w-3.5 h-3.5" />
         </button>
       )}
@@ -3270,7 +3275,7 @@ function Modal({ kind, editing, onClose, onSave, fxRates, onSaveFx, onImport, as
       <div className="rounded-2xl w-full max-w-md p-6 fade-in max-h-[90vh] overflow-y-auto scrollbar-thin"
         style={{ background: T.surface, border: `1px solid ${T.border2}` }} onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-5">
-          <h3 className="font-display text-2xl" style={{ color: T.gold }}>{title}</h3>
+          <h3 className="font-display text-2xl" style={{ color: T.accent }}>{title}</h3>
           <button onClick={onClose} className="p-1.5 rounded-full hover:bg-white/5"><X className="w-4 h-4" style={{ color: T.textDim }} /></button>
         </div>
 
@@ -3634,7 +3639,7 @@ function Modal({ kind, editing, onClose, onSave, fxRates, onSaveFx, onImport, as
                   style={{ background: T.surface2, border: `1px solid ${T.border2}`, color: T.text, fontFamily: 'DM Mono, monospace' }} />
               </Field>
               <p className="text-xs leading-relaxed" style={{ color: T.textFaint }}>
-                Required: <span style={{ color: T.gold }}>ticker</span>, <span style={{ color: T.gold }}>shares</span>. Optional: assetType (stock/crypto/fund, default stock), name, avgCost, currentPrice, broker, notes, tag.
+                Required: <span style={{ color: T.accent }}>ticker</span>, <span style={{ color: T.accent }}>shares</span>. Optional: assetType (stock/crypto/fund, default stock), name, avgCost, currentPrice, broker, notes, tag.
               </p>
             </>
           )}
@@ -3645,7 +3650,7 @@ function Modal({ kind, editing, onClose, onSave, fxRates, onSaveFx, onImport, as
             style={{ border: `1px solid ${T.border2}`, color: T.text }}>Cancel</button>
           <button onClick={handleSubmit} disabled={!valid} className="flex-1 py-2.5 rounded-full text-sm transition-all"
             style={{
-              background: valid ? T.gold : T.border2,
+              background: valid ? T.accent : T.border2,
               color: valid ? T.bg : T.textFaint,
               fontWeight: 500,
               cursor: valid ? 'pointer' : 'not-allowed'
